@@ -1,17 +1,44 @@
 # PPTP
 
-install pptp on ubuntu 14.04 （openVZ or KVM）
+install pptp on ubuntu 14.04 （openVZ or KVM）#在Ubuntu上安装PPTP VPN
 
-##prepare
+##prepare #必要的工具及系统
 putty 
-ubuntu14
+ubuntu 14.04
 
 ##No.1 
-=> putty.exe
-  => hostname (or ipaddress)
-  => port 22
-  => open
-    => login as :  root
-    => enter your password :   #you cannot see what you input there .you can copy and paste your password
-    
- # 
+putty configuration #软件配置
+	enter  your username and password to log in ubuntu #输入用户名和密码连接系统
+
+##No.2
+configuration #开始配置
+#单击鼠标右键可以将剪切板内容复制进putty中
+apt-get -y update
+apt-get install pptpd   
+apt-get install iptables
+
+sudo cat > /etc/pptpd.conf << END
+option /etc/ppp/pptpd-options
+logwtmp
+localip 192.168.0.1
+remoteip 192.168.0.10-100
+END
+
+vim /etc/ppp/pptpd-options
+	ms-dns 8.8.8.8
+	ms-dns 8.8.4.4
+
+cat >> /etc/sysctl.conf << END
+net.ipv4.ip_forward = 1
+END 	#vim /etc/sysctl.conf
+
+sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o venet0 -j MASQUERADE
+ #MASQUERADE伪装的意思，veneto公网接口可以通过ifconfig命令查看
+
+sudo iptables-save > /etc/iptables.rules
+
+vim /etc/ppp/chap-secrets
+
+/etc/init.d/pptpd restart
+netstat -lntp
+
