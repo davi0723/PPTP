@@ -32,7 +32,9 @@ cat >> /etc/sysctl.conf << END
 net.ipv4.ip_forward = 1
 END 	#vim /etc/sysctl.conf
 
-sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o venet0 -j MASQUERADE
+sysctl -p #使修改生效
+
+sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o eth0 -j MASQUERADE
  #MASQUERADE伪装的意思，veneto公网接口可以通过ifconfig命令查看
 
 sudo iptables-save > /etc/iptables.rules
