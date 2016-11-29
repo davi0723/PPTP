@@ -46,3 +46,8 @@ vim /etc/ppp/chap-secrets
 /etc/init.d/pptpd restart
 netstat -lntp
  #重启服务
+
+
+iptables -t nat -A POSTROUTING -j SNAT --to-source 35.164.129.152 -o eth0
+
+35.164.129.152
