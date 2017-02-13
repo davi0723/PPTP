@@ -14,6 +14,7 @@ ubuntu /12.04/14.04/16.04
 	
 	*开始配置*
 	*单击鼠标右键可以将剪切板内容复制进putty中*
+	*输入sudo su 命令可以免密切换到root账户*
 
 apt-get -y update
 apt-get install pptpd   
